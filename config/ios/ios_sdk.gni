@@ -126,6 +126,12 @@ if (ios_sdk_path == "") {
   } else if (target_environment == "catalyst") {
     ios_sdk_name = "macosx"
     ios_sdk_platform = "MacOSX"
+  } else if (target_environment == "appletvos") {
+    ios_sdk_name = "appletvos"
+    ios_sdk_platform = "AppleTVOS"
+  } else if (target_environment == "appletvsimulator") {
+    ios_sdk_name = "appletvsimulator"
+    ios_sdk_platform = "AppleTVSimulator"
   } else {
     assert(false, "unsupported environment: $target_environment")
   }
@@ -162,7 +168,7 @@ if (ios_sdk_path == "") {
   xcode_version_int = _ios_sdk_result.xcode_version_int
   xcode_build = _ios_sdk_result.xcode_build
   machine_os_build = _ios_sdk_result.machine_os_build
-  if (target_environment == "simulator") {
+  if (target_environment == "simulator" || target_environment == "appletvsimulator") {
     # This is weird, but Xcode sets DTPlatformBuild to an empty field for
     # simulator builds.
     ios_platform_build = ""
@@ -171,7 +177,7 @@ if (ios_sdk_path == "") {
   }
 }
 
-if (target_environment == "device" && ios_enable_code_signing) {
+if ((target_environment == "device" || target_environment == "appletvos") && ios_enable_code_signing) {
   # Automatically select a codesigning identity if no identity is configured.
   # This only applies to device build as simulator builds are not signed.
   if (ios_code_signing_identity == "") {

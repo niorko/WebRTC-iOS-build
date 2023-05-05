@@ -106,7 +106,7 @@ template("ios_test_runner_wrapper") {
     }
 
     # test runner relies on iossim for simulator builds.
-    if (target_environment == "simulator") {
+    if (target_environment == "simulator" || target_environment == "appletvsimulator") {
       _rebased_root_build_dir = rebase_path("${root_build_dir}", root_build_dir)
       data_deps += [ "//testing/iossim" ]
 
