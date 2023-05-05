@@ -205,7 +205,7 @@ template("create_signed_bundle") {
                            ])
 
     bundle_root_dir = "$_bundle_gen_dir/$_output_name$_bundle_extension"
-    if (target_environment == "simulator" || target_environment == "device") {
+    if (target_environment == "simulator" || target_environment == "device" || target_environment == "appletvos" || target_environment == "appletvsimulator") {
       bundle_contents_dir = bundle_root_dir
       bundle_resources_dir = bundle_contents_dir
       bundle_executable_dir = bundle_contents_dir
@@ -274,7 +274,7 @@ template("create_signed_bundle") {
       code_signing_outputs +=
           [ "$bundle_contents_dir/_CodeSignature/CodeResources" ]
     }
-    if (ios_code_signing_identity != "" && target_environment == "device" &&
+    if (ios_code_signing_identity != "" && (target_environment == "device" || target_environment == "appletvos") &&
         _enable_embedded_mobileprovision) {
       code_signing_outputs +=
           [ "$bundle_contents_dir/embedded.mobileprovision" ]
@@ -603,7 +603,7 @@ template("ios_app_bundle") {
     }
     frameworks += [ "UIKit.framework" ]
 
-    if (target_environment == "simulator") {
+    if (target_environment == "simulator" || target_environment == "appletvsimulator") {
       if (!defined(deps)) {
         deps = []
       }
@@ -759,7 +759,7 @@ template("ios_app_bundle") {
       }
       bundle_deps += _variant.bundle_deps
 
-      if (target_environment == "simulator") {
+      if (target_environment == "simulator" || target_environment == "appletvsimulator") {
         if (!defined(data_deps)) {
           data_deps = []
         }
@@ -1165,7 +1165,7 @@ template("ios_framework_bundle") {
     _public_headers = invoker.public_headers
 
     _framework_root_dir = "$root_out_dir/$_output_name.framework"
-    if (target_environment == "simulator" || target_environment == "device") {
+    if (target_environment == "simulator" || target_environment == "device" || target_environment == "appletvsimulator" || target_environment == "appletvos") {
       _framework_contents_dir = _framework_root_dir
     } else if (target_environment == "catalyst") {
       _framework_contents_dir = "$_framework_root_dir/Versions/A"
